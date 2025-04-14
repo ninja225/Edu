@@ -1,0 +1,14 @@
+# Python/Django specific
+*.pyc
+__pycache__/
+*.py[cod]
+db.sqlite3
+media/
+static/
+.env
+.venv/
+venv/
+.coverage
+htmlcov/
+*.log
+local_settings.py
