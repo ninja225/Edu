@@ -31,31 +31,62 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # Django default apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Third party apps
+    
+    # Third-party apps
+    'django.contrib.sites',  # Required for allauth
+    'allauth',  # Core allauth app
+    'allauth.account',  # Email/password auth
+    'allauth.socialaccount',  # Social login base
+    'allauth.socialaccount.providers.google',  # Google login
+    'allauth.socialaccount.providers.microsoft',  # Microsoft login
+
+    # REST Framework and JWT
     'rest_framework',
+    'rest_framework_simplejwt',
+    
+    # Auth & registration
+    'dj_rest_auth',
+    'dj_rest_auth.registration',  # Needed for registration endpoints
+
+    # Token-based authentication
+    'rest_framework.authtoken',  # Added this line
+    
+    # CORS headers for cross-origin requests
     'corsheaders',
+
+    # API documentation
     'drf_spectacular',
+
+    # Channels (if you're using WebSockets, etc.)
     'channels',
+    
     # Local apps
     'api',
+    'users',
 ]
 
+
 MIDDLEWARE = [
+    # Django default middleware
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',  # CORS middleware
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # Required for auth
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # Add this line for allauth
+    'allauth.account.middleware.AccountMiddleware',  # Needed for allauth
 ]
+
 
 ROOT_URLCONF = 'core.urls'
 
@@ -162,3 +193,15 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'Your project description',
     'VERSION': '1.0.0',
 }
+
+# for changing auth setting to token-based authentication
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+SITE_ID = 1
+
+
+AUTH_USER_MODEL = 'users.MyUser'
